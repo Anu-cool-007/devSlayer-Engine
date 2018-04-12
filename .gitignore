@@ -11,7 +11,8 @@
 .mtj.tmp/
 
 #VCS of Intellij IDEA
-workspace.xml
+.idea/workspace.xml
+
 
 # Package Files #
 *.jar
