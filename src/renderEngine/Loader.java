@@ -1,20 +1,23 @@
 package renderEngine;
 
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
 import models.RawModel;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Loader {
 
@@ -31,17 +34,30 @@ public class Loader {
         return new RawModel(vaoID, indices.length);
     }
 
-    public int loadTexture(String fileame) {
+    public int loadTexture(String fileName) {
         Texture texture = null;
         try {
-            texture = TextureLoader.getTexture("PNG", new FileInputStream("res/" + fileame + ".png"));
-        } catch (IOException e) {
+            texture = TextureLoader.getTexture("PNG",
+                    new FileInputStream("res/" + fileName + ".png"));
+        } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Tried to load texture " + fileName + ".png , didn't work");
+            System.exit(-1);
         }
-        int textureID = texture.getTextureID();
-        textures.add(textureID);
-        return textureID;
+        textures.add(texture.getTextureID());
+        return texture.getTextureID();
+    }
 
+    public void cleanUp() {
+        for (int vao : vaos) {
+            GL30.glDeleteVertexArrays(vao);
+        }
+        for (int vbo : vbos) {
+            GL15.glDeleteBuffers(vbo);
+        }
+        for (int texture : textures) {
+            GL11.glDeleteTextures(texture);
+        }
     }
 
     private int createVAO() {
@@ -66,7 +82,6 @@ public class Loader {
     }
 
     private void bindIndicesBuffer(int[] indices) {
-
         int vboID = GL15.glGenBuffers();
         vbos.add(vboID);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboID);
@@ -88,15 +103,5 @@ public class Loader {
         return buffer;
     }
 
-    public void cleanUp() {
-        for (int vao : vaos) {
-            GL30.glDeleteVertexArrays(vao);
-        }
-        for (int vbo : vbos) {
-            GL15.glDeleteBuffers(vbo);
-        }
-        for (int texture : textures) {
-            GL11.glDeleteTextures(texture);
-        }
-    }
+
 }
