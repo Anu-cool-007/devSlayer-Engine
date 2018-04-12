@@ -10,6 +10,9 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+#VCS of Intellij IDEA
+workspace.xml
+
 # Package Files #
 *.jar
 *.war
