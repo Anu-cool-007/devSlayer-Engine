@@ -1,11 +1,9 @@
 package shaders;
 
+import entities.Camera;
 import entities.Light;
 import org.lwjgl.util.vector.Matrix4f;
-
 import toolbox.Maths;
-
-import entities.Camera;
 
 public class StaticShader extends ShaderProgram {
 
