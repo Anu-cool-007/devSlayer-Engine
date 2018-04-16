@@ -25,7 +25,7 @@ public class MasterRenderer {
     private Matrix4f projectionMatrix;
 
     private StaticShader shader = new StaticShader();
-    private EntityRenderer entityRenderer ;
+    private EntityRenderer entityRenderer;
 
     private TerrainRenderer terrainRenderer;
     private TerrainShader terrainShader = new TerrainShader();

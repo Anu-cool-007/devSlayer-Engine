@@ -1,4 +1,4 @@
-package toolbox;
+package toolBox;
 
 import entities.Camera;
 import org.lwjgl.util.vector.Matrix4f;
