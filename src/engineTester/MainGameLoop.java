@@ -44,7 +44,7 @@ public class MainGameLoop {
             renderer.processTerrain(terrain2);
             renderer.processTerrain(terrain1);
             renderer.processEntity(entity);
-            
+
             renderer.render(light, camera);
             DisplayManager.updateDisplay();
         }
