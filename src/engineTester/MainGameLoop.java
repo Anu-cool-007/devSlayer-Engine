@@ -5,6 +5,7 @@ import entities.Entity;
 import entities.Light;
 import models.RawModel;
 import models.TexturedModel;
+import objConverter.OBJFileLoader;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 import renderEngine.DisplayManager;
@@ -25,23 +26,34 @@ public class MainGameLoop {
         DisplayManager.createDisplay();
         Loader loader = new Loader();
 
-        RawModel model = OBJLoader.loadObjModel("tree", loader);
+        //New OBJ Parser
+        objConverter.ModelData treeData = OBJFileLoader.loadOBJ("tree");
+        RawModel treeModel = loader.loadToVAO(treeData.getVertices(), treeData.getTextureCoords(),treeData.getNormals(),treeData.getIndices());
+        TexturedModel treeFinal = new TexturedModel(treeModel, new ModelTexture(loader.loadTexture("tree")));
 
+        objConverter.ModelData grassData = OBJFileLoader.loadOBJ("grassModel");
+        RawModel grassModel = loader.loadToVAO(grassData.getVertices(), grassData.getTextureCoords(),grassData.getNormals(),grassData.getIndices());
+        TexturedModel grassFinal = new TexturedModel(grassModel, new ModelTexture(loader.loadTexture("grassTexture")));
+        grassFinal.getTexture().setHasTransparency(true);
+        grassFinal.getTexture().setUseFakeLighting(true);
 
-        TexturedModel staticModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("tree")));
-        TexturedModel grass = new TexturedModel(OBJLoader.loadObjModel("grassModel",loader), new ModelTexture(loader.loadTexture("grassTexture")));
-        grass.getTexture().setHasTransparency(true);
-        grass.getTexture().setUseFakeLighting(true);
+        objConverter.ModelData lowPolyTreeData = OBJFileLoader.loadOBJ("lowPolyTree");
+        RawModel lowPolyTreeModel = loader.loadToVAO(lowPolyTreeData.getVertices(), lowPolyTreeData.getTextureCoords(),lowPolyTreeData.getNormals(),lowPolyTreeData.getIndices());
+        TexturedModel lowPolyTreeFinal = new TexturedModel(lowPolyTreeModel, new ModelTexture(loader.loadTexture("lowPolyTree")));
+        grassFinal.getTexture().setHasTransparency(true);
+        grassFinal.getTexture().setUseFakeLighting(true);
 
+        //Old OBJ Parser
         TexturedModel fern = new TexturedModel(OBJLoader.loadObjModel("fern",loader), new ModelTexture(loader.loadTexture("fern")));
         fern.getTexture().setHasTransparency(true);
 
-        List<Entity> entities = new ArrayList<Entity>();
+        List<Entity> entities = new ArrayList<>();
 
         Random random = new Random();
         for(int i=0;i<500;i++) {
-            entities.add(new Entity(staticModel, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 3));
-            entities.add(new Entity(grass, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 1));
+            entities.add(new Entity(treeFinal, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 3));
+            entities.add(new Entity(lowPolyTreeFinal, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 0.3f));
+            entities.add(new Entity(grassFinal, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 1));
             entities.add(new Entity(fern, new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 0.6f));
         }
 
