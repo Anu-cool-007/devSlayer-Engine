@@ -47,7 +47,7 @@ public class EntityRenderer {
         GL20.glEnableVertexAttribArray(2);
 
         ModelTexture texture = model.getTexture();
-        if(texture.isHasTransparency()) {
+        if (texture.isHasTransparency()) {
             MasterRenderer.disableCulling();
         }
         shader.loadFakeLightingVariable(texture.isUseFakeLighting());
