@@ -48,7 +48,7 @@ public class TerrainShader extends ShaderProgram {
     }
 
     public void loadViewMatrix(Camera camera) {
-        Matrix4f viewMatrix = toolbox.Maths.createViewMatrix(camera);
+        Matrix4f viewMatrix = toolBox.Maths.createViewMatrix(camera);
         super.loadMatrix(location_viewMatrix, viewMatrix);
     }
 
